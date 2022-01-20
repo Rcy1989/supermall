@@ -1,20 +1,29 @@
 <template>
-  <div class="">
-    <h2>首页</h2>
+  <div class="home">
+    <nav-bar class="home_navbar">
+      <template v-slot:center>购物车</template>
+    </nav-bar>
+
   </div>
 </template>
 
 <script >
-  export default {
-    name: "",
-    data() {
-      return {}
-    },
-    components: {},
-    methods: {}
-  }
+
+import NavBar from "components/common/navbar/NavBar";
+export default {
+  data() {
+    return {
+
+    };
+  },
+  components: {
+    NavBar,
+  },
+};
 </script>
 
 <style >
-
+.home_navbar {
+  background-color: deeppink;
+}
 </style>
