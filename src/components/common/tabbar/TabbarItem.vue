@@ -34,6 +34,7 @@ export default {
 <style>
   .tabbaritem{
     flex: 1;
+    padding-top: 2px;
   }
   .tabbaritem img{
     width: 24px;
