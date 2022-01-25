@@ -21,5 +21,6 @@ export default {
     background-color: #f2f2f2;
     text-align: center;
     vertical-align: center;
+    z-index: 10;
   }
 </style>

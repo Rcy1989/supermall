@@ -11,7 +11,7 @@
     <!-- 本周流行 -->
     <home-popular />
     <!-- 控制选项卡 -->
-    <tab-control class="tab-control" :tabtitle="['流行', '新款', '精选']" @homeClickIndex="homeClickIndex"/>
+    <tab-control class="tab-control" :tabtitle="['流行', '新款', '精选']" @tabClickIndex="homeClickIndex"/>
     <!-- 选项卡数据显示 -->
     <goods :goodslist="goods[goods_key].list"/>
     <ul>
@@ -131,7 +131,6 @@ export default {
           this.goods_key = 'sell'
           break
       }
-
     },
     // 网络请求相关
     getHomeMultidata() {

@@ -1,11 +1,14 @@
 <template>
   <div class="goods-item">
-    <img :src="goods.show.img" alt="">
-    <div class="goods-info">
-      <p>{{goods.title}}</p>
-      <span class="price">{{goods.price}}</span>
-      <span class="collect">{{goods.cfav}}</span>
-    </div>
+    <a :href="goods.clientUrl">
+      <img :src="goods.show.img" alt="">
+      <div class="goods-info">
+        <p>{{goods.title}}</p>
+        <span class="price">{{goods.price}}</span>
+        <span class="collect">{{goods.cfav}}</span>
+      </div>
+    </a>
+
   </div>
 </template>
 
@@ -18,7 +21,7 @@
       goods:[]
     },
     components: {},
-    methods: {}
+    methods: {},
   }
 </script>
 

@@ -26,7 +26,7 @@ export default {
   methods: {
     tabitem(index) {
       this.activeIndex = index;
-      this.$emit('homeClickIndex',index)
+      this.$emit('tabClickIndex',index)
     },
   },
 };
