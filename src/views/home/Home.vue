@@ -5,7 +5,14 @@
       ><template v-slot:center>购物街</template></nav-bar
     >
 
-    <scroll class="HomescrollWrapper" ref="scroll">
+    <scroll
+      class="HomescrollWrapper"
+      ref="scroll"
+      :probe-type="3"
+      :pull-up-load="true"
+      @scrollposition="scrollposition"
+      @pullUpLoadMore="loadmore"
+    >
       <!-- 轮播图 -->
       <home-swiper :childbanners="banners" />
       <!-- 推荐 -->
@@ -21,29 +28,8 @@
       <!-- 选项卡数据显示 -->
       <goods :HomeGoods="getHomeGoods_list" />
     </scroll>
-    <back-top @click.native="backtopclick" />
-    <!-- <ul>
-      <li>哈哈1</li>
-      <li>哈哈2</li>
-      <li>哈哈3</li>
-      <li>哈哈4</li>
-      <li>哈哈5</li>
-      <li>哈哈6</li>
-      <li>哈哈7</li>
-      <li>哈哈8</li>
-      <li>哈哈9</li>
-      <li>哈哈10</li>
-      <li>哈哈11</li>
-      <li>哈哈12</li>
-      <li>哈哈13</li>
-      <li>哈哈14</li>
-      <li>哈哈15</li>
-      <li>哈哈16</li>
-      <li>哈哈17</li>
-      <li>哈哈18</li>
-      <li>哈哈19</li>
-      <li>哈哈20</li>
-    </ul> -->
+    <!-- 返回顶部插件 -->
+    <back-top @click.native="backtopclick" v-show="isshowTopBack" />
   </div>
 </template>
 
@@ -59,7 +45,7 @@ import HomeRecommend from "./child/HomeRecommend.vue";
 import HomePopular from "./child/HomePopular.vue";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
-
+import { debounce } from "common/utils";
 export default {
   data() {
     return {
@@ -71,6 +57,8 @@ export default {
         sell: { page: 0, list: [] },
       },
       tabtitle_type: "pop",
+      isshowTopBack: false,
+      positionY: 0,
     };
   },
   components: {
@@ -113,7 +101,13 @@ export default {
     backtopclick() {
       this.$refs.scroll.scrollTo(0, 0);
     },
-
+    scrollposition(position) {
+      // console.log(position)
+      this.isshowTopBack = -position.y > 1000;
+    },
+    loadmore() {
+      this.getHomeGoods(this.tabtitle_type);
+    },
     // 网络请求相关
     getHomeMultidata() {
       getHomeMultidata().then((res) => {
@@ -122,12 +116,31 @@ export default {
       });
     },
     getHomeGoods(type) {
-      const page = (this.goods[type].page += 1);
+      const page = this.goods[type].page + 1;
       getHomeGoods(type, page).then((res) => {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
+        this.$refs.scroll.finishPullUp();
       });
     },
+  },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh, 200);
+    this.$bus.$on("ItemImageLoad", () => {
+      if (this.$refs.scroll)
+        refresh();
+    });
+  },
+  deactivated() {
+    this.positionY = this.$refs.scroll.scroll.y;
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0, this.positionY, 0);
+    this.$refs.scroll.refresh();
+    // console.log('home active')
+  },
+  destroyed() {
+    // console.log('home destroy')
   },
 };
 </script>
@@ -148,10 +161,10 @@ export default {
   z-index: 999;
   width: 100vw;
 }
-.tab-control {
+/* .tab-control {
   position: sticky;
   top: 44px;
-}
+} */
 .HomescrollWrapper {
   /* height: calc(100vh-44px); */
   /*   

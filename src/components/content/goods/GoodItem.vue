@@ -1,27 +1,34 @@
 <template>
-  <div class="goods-item">
-    <a :href="goods.clientUrl">
-      <img :src="goods.show.img" alt="" />
-      <div class="goods-info">
-        <p>{{ goods.title }}</p>
-        <span class="price">{{ goods.price }}</span>
-        <span class="collect">{{ goods.cfav }}</span>
-      </div>
-    </a>
+  <div class="goods-item" @click="goodsitemclick">
+    <img :src="goods.show.img" alt="" @load="ItemImageLoad" />
+    <div class="goods-info">
+      <p>{{ goods.title }}</p>
+      <span class="price">{{ goods.price }}</span>
+      <span class="collect">{{ goods.cfav }}</span>
+    </div>
   </div>
 </template>
 
 <script >
 export default {
   data() {
-    return {};
+    return {
+      
+    }
   },
 
   props: {
     goods: [],
   },
   components: {},
-  methods: {},
+  methods: {
+    ItemImageLoad() {
+      this.$bus.$emit("ItemImageLoad");
+    },
+    goodsitemclick(){
+      this.$router.push('/detail/'+this.goods.iid)
+    }
+  }
 };
 </script>
 
